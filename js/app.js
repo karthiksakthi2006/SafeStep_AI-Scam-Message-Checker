@@ -90,8 +90,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // --- One-Click Sample Buttons ---
   btnSampleSuspicious.addEventListener('click', () => {
-    const sample = SAMPLE_MESSAGES.suspicious[0];
-    messageInput.value = sample.text;
+    const samples = window.SAMPLE_MESSAGES || (typeof SAMPLE_MESSAGES !== 'undefined' ? SAMPLE_MESSAGES : null);
+    if (samples && samples.suspicious && samples.suspicious[0]) {
+      messageInput.value = samples.suspicious[0].text;
+    } else {
+      messageInput.value = 'URGENT: Your First National Bank account has been restricted due to unauthorized login attempts. Immediate action required within 24 hours to prevent permanent closure. Verify your identity now at http://firstnational-security-login.xyz/verify to restore access.';
+    }
     hideValidation();
     updateCounters();
     runAnalysis();
@@ -99,8 +103,12 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   btnSampleOrdinary.addEventListener('click', () => {
-    const sample = SAMPLE_MESSAGES.ordinary[0];
-    messageInput.value = sample.text;
+    const samples = window.SAMPLE_MESSAGES || (typeof SAMPLE_MESSAGES !== 'undefined' ? SAMPLE_MESSAGES : null);
+    if (samples && samples.ordinary && samples.ordinary[0]) {
+      messageInput.value = samples.ordinary[0].text;
+    } else {
+      messageInput.value = 'Hi Alex, this is a reminder from Cedar Grove Family Health of your upcoming appointment with Dr. Taylor tomorrow, Oct 2nd at 10:15 AM. Please reply C to confirm, or call our reception desk at (555) 018-9920 if you need to reschedule.';
+    }
     hideValidation();
     updateCounters();
     runAnalysis();
@@ -121,12 +129,22 @@ document.addEventListener('DOMContentLoaded', () => {
 
     hideValidation();
 
-    // 2. Perform client-side heuristic analysis
-    const analysis = SafeStepAnalyzer.analyzeMessage(text);
-    currentAnalysis = analysis;
+    try {
+      const analyzer = window.SafeStepAnalyzer || (typeof SafeStepAnalyzer !== 'undefined' ? SafeStepAnalyzer : null);
+      if (!analyzer) {
+        throw new Error('SafeStepAnalyzer engine not found.');
+      }
 
-    // 3. Immediately display the results panel without page refresh
-    displayResults(analysis);
+      // 2. Perform client-side heuristic analysis
+      const analysis = analyzer.analyzeMessage(text);
+      currentAnalysis = analysis;
+
+      // 3. Immediately display the results panel without page refresh
+      displayResults(analysis);
+    } catch (err) {
+      console.error('SafeStep Analysis Error:', err);
+      showToast('Error during analysis. Please check console.');
+    }
   }
 
   // --- Clear Button Handler ---
@@ -329,34 +347,48 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
+  function getSuspiciousSampleText() {
+    const s = window.SAMPLE_MESSAGES || (typeof SAMPLE_MESSAGES !== 'undefined' ? SAMPLE_MESSAGES : null);
+    return (s && s.suspicious && s.suspicious[0])
+      ? s.suspicious[0].text
+      : 'URGENT: Your First National Bank account has been restricted due to unauthorized login attempts. Immediate action required within 24 hours to prevent permanent closure. Verify your identity now at http://firstnational-security-login.xyz/verify to restore access.';
+  }
+
+  function getOrdinarySampleText() {
+    const s = window.SAMPLE_MESSAGES || (typeof SAMPLE_MESSAGES !== 'undefined' ? SAMPLE_MESSAGES : null);
+    return (s && s.ordinary && s.ordinary[0])
+      ? s.ordinary[0].text
+      : 'Hi Alex, this is a reminder from Cedar Grove Family Health of your upcoming appointment with Dr. Taylor tomorrow, Oct 2nd at 10:15 AM. Please reply C to confirm, or call our reception desk at (555) 018-9920 if you need to reschedule.';
+  }
+
   // Define 4 Manual Test Scenarios
   const TEST_SCENARIOS = [
     {
       id: 'test_suspicious',
       name: 'Scenario 1: Suspicious Phishing Text',
       desc: 'Tests detection of urgent account restriction, fake bank link, and credential verification.',
-      sampleText: SAMPLE_MESSAGES.suspicious[0].text,
+      getSampleText: getSuspiciousSampleText,
       validate: (res) => res.isValid && res.findings.length >= 2
     },
     {
       id: 'test_ordinary',
       name: 'Scenario 2: Ordinary Benign Message',
       desc: 'Tests benign appointment reminder to ensure “No common warning signs found” result.',
-      sampleText: SAMPLE_MESSAGES.ordinary[0].text,
+      getSampleText: getOrdinarySampleText,
       validate: (res) => res.isValid && res.findings.length === 0
     },
     {
       id: 'test_empty',
       name: 'Scenario 3: Empty Input Validation',
       desc: 'Tests checking an empty box to ensure helpful validation alert is displayed without crashing.',
-      sampleText: '',
-      validate: (res) => !res.isValid && res.error.includes('Please paste or type')
+      getSampleText: () => '',
+      validate: (res) => !res.isValid && res.error && res.error.includes('Please paste or type')
     },
     {
       id: 'test_clear',
       name: 'Scenario 4: Clear Button Reset',
       desc: 'Tests that input text, counters, and results are properly wiped when Clear is selected.',
-      sampleText: 'Sample text to clear',
+      getSampleText: () => 'Sample text to clear',
       validate: () => true
     }
   ];
@@ -373,7 +405,9 @@ document.addEventListener('DOMContentLoaded', () => {
         const passed = (messageInput.value === '' && !resultsActiveState.classList.contains('visible'));
         updateTestStatus(statusEl, detailsEl, passed, 'Clear properly emptied input and reset results.');
       } else {
-        const res = SafeStepAnalyzer.analyzeMessage(scenario.sampleText);
+        const textToAnalyze = scenario.getSampleText ? scenario.getSampleText() : (scenario.sampleText || '');
+        const analyzer = window.SafeStepAnalyzer || (typeof SafeStepAnalyzer !== 'undefined' ? SafeStepAnalyzer : null);
+        const res = analyzer ? analyzer.analyzeMessage(textToAnalyze) : { isValid: false, findings: [] };
         const passed = scenario.validate(res);
         const detailMsg = passed
           ? `Verified: ${res.findings ? res.findings.length + ' signs found' : 'Validation alert triggered'}.`
@@ -414,7 +448,7 @@ document.addEventListener('DOMContentLoaded', () => {
         updateCounters();
         runAnalysis();
       } else {
-        messageInput.value = scenario.sampleText;
+        messageInput.value = scenario.getSampleText ? scenario.getSampleText() : '';
         updateCounters();
         runAnalysis();
         showToast(`Loaded and checked: ${scenario.name}`);

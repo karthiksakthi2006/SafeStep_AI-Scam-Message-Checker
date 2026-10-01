@@ -10,13 +10,19 @@
     module.exports = factory(rules);
   } else {
     // Browser environment
-    root.SafeStepAnalyzer = factory({
-      SCAM_CATEGORIES: root.SCAM_CATEGORIES,
-      SCAM_PATTERNS: root.SCAM_PATTERNS,
-      URL_SHORTENERS: root.URL_SHORTENERS,
-      RISKY_TLDS: root.RISKY_TLDS,
-      BRAND_SPOOF_PATTERNS: root.BRAND_SPOOF_PATTERNS
-    });
+    const win = (typeof window !== 'undefined' ? window : root);
+    const rules = win.SafeStepRules || root.SafeStepRules || {
+      SCAM_CATEGORIES: win.SCAM_CATEGORIES || root.SCAM_CATEGORIES || {},
+      SCAM_PATTERNS: win.SCAM_PATTERNS || root.SCAM_PATTERNS || [],
+      URL_SHORTENERS: win.URL_SHORTENERS || root.URL_SHORTENERS || [],
+      RISKY_TLDS: win.RISKY_TLDS || root.RISKY_TLDS || [],
+      BRAND_SPOOF_PATTERNS: win.BRAND_SPOOF_PATTERNS || root.BRAND_SPOOF_PATTERNS || []
+    };
+    const analyzer = factory(rules);
+    root.SafeStepAnalyzer = analyzer;
+    if (typeof window !== 'undefined') {
+      window.SafeStepAnalyzer = analyzer;
+    }
   }
 }(typeof self !== 'undefined' ? self : this, function (rules) {
   'use strict';

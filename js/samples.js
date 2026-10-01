@@ -1,10 +1,15 @@
-/**
- * SafeStep Curated Sample Messages
- * Contains both realistic suspicious scam messages and benign ordinary messages.
- * Note: All contact names, phone numbers, and URLs are entirely fictional and safe.
- */
+(function (root, factory) {
+  if (typeof module === 'object' && module.exports) {
+    module.exports = factory();
+  } else {
+    const samples = factory();
+    root.SafeStepSamples = samples;
+    root.SAMPLE_MESSAGES = samples.SAMPLE_MESSAGES;
+  }
+}(typeof self !== 'undefined' ? self : this, function () {
+  'use strict';
 
-const SAMPLE_MESSAGES = {
+  const SAMPLE_MESSAGES = {
   suspicious: [
     {
       id: 'suspicious_bank_alert',
@@ -74,7 +79,5 @@ const SAMPLE_MESSAGES = {
   ]
 };
 
-// Export for Node.js test environment if needed
-if (typeof module !== 'undefined' && module.exports) {
-  module.exports = { SAMPLE_MESSAGES };
-}
+  return { SAMPLE_MESSAGES };
+}));
