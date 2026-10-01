@@ -62,8 +62,8 @@ You can run SafeStep on **Windows, macOS, or Linux** using any of the methods be
 ### Option 1: Using the Local Node Server (Recommended)
 1. Clone or download this repository:
    ```bash
-   git clone https://github.com/YOUR_USERNAME/safestep-scam-checker.git
-   cd safestep-scam-checker
+   git clone https://github.com/karthiksakthi2006/SafeStep_AI-Scam-Message-Checker.git
+   cd SafeStep_AI-Scam-Message-Checker
    ```
 2. Start the local server:
    ```bash
@@ -94,12 +94,12 @@ Because SafeStep is built with modern vanilla web technologies, you can simply *
 ## 🌐 Live Demo & GitHub Pages Deployment
 
 To host this project for free on **GitHub Pages**:
-1. Go to your repository on GitHub.
+1. Go to your repository on GitHub: [`SafeStep_AI-Scam-Message-Checker`](https://github.com/karthiksakthi2006/SafeStep_AI-Scam-Message-Checker)
 2. Click **Settings** ➔ **Pages** (in the left sidebar).
 3. Under **Branch**, select `main` and root folder `/ (root)`.
 4. Click **Save**. Within 60 seconds, your project will be live at:
    ```
-   https://YOUR_USERNAME.github.io/safestep-scam-checker/
+   https://karthiksakthi2006.github.io/SafeStep_AI-Scam-Message-Checker/
    ```
 
 ---
