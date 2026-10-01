@@ -1,0 +1,20 @@
+{
+  "name": "safestep-scam-checker",
+  "version": "1.0.0",
+  "description": "SafeStep: An AI Scam Message Checker for Digital Safety & Cybersecurity hackathons",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "test": "node test/test-analyzer.js"
+  },
+  "keywords": [
+    "cybersecurity",
+    "scam-checker",
+    "phishing-detection",
+    "digital-safety",
+    "hackathon",
+    "privacy-first"
+  ],
+  "author": "SafeStep Team",
+  "license": "MIT"
+}

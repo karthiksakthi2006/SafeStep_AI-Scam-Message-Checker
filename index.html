@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SafeStep — AI Scam Message Checker</title>
+  <meta name="description" content="SafeStep helps you pause and spot common scam warning signs in SMS, email, and chat messages before responding. 100% private in-browser analysis.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Outfit:wght@500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div class="app-wrapper">
+    <!-- Top Bar -->
+    <header class="header-nav" role="banner">
+      <div class="brand-container">
+        <div class="brand-icon" aria-hidden="true">🛡️</div>
+        <div class="brand-text">
+          <span class="brand-name">SafeStep</span>
+          <span class="brand-subtitle">AI Scam Message Checker</span>
+        </div>
+      </div>
+
+      <div class="header-badges">
+        <span class="badge-hackathon" title="Hackathon Category">
+          <span>🏆</span> Digital Safety & Cybersecurity
+        </span>
+        <button id="themeToggleBtn" class="theme-toggle-btn" type="button" aria-label="Toggle visual theme" title="Toggle visual theme">
+          ☀️
+        </button>
+      </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero-section" aria-label="Introduction">
+      <h1 class="hero-title">SafeStep</h1>
+      <h2 class="hero-heading">Pause before you trust a message.</h2>
+      <p class="hero-subheading">
+        Check SMS, email, or chat messages for common red flags—such as urgent threats, OTP requests, fake links, or unusual payments—before you respond.
+      </p>
+    </section>
+
+    <!-- Privacy Banner & User Warning -->
+    <div class="privacy-banner" role="region" aria-label="Privacy and Safety Notice">
+      <div class="privacy-banner-left">
+        <span aria-hidden="true">🔒</span>
+        <div>
+          <strong>Privacy First:</strong> Analyzed locally inside your browser—no messages are sent to a server or stored.
+          <span class="privacy-warning-highlight">⚠️ Please do not paste actual passwords, OTPs, or sensitive private information.</span>
+        </div>
+      </div>
+      <span class="privacy-banner-tag">100% Client-Side</span>
+    </div>
+
+    <!-- Main Checker Layout -->
+    <main class="main-grid" role="main">
+      <!-- Left Column: Input and Sample Controls -->
+      <section class="glass-card" aria-labelledby="inputSectionTitle">
+        <div class="card-header">
+          <div class="card-title-group">
+            <span aria-hidden="true">✉️</span>
+            <h2 id="inputSectionTitle">Message Input</h2>
+          </div>
+          <span class="card-badge">SMS • Email • Chat</span>
+        </div>
+
+        <!-- One-Click Sample Messages -->
+        <div class="samples-wrapper">
+          <div class="samples-label">
+            <span>One-Click Sample Messages</span>
+            <span style="font-size:0.75rem; color:var(--text-muted); text-transform:none;">Click to fill &amp; test</span>
+          </div>
+          <div class="samples-chips">
+            <button id="btnSampleSuspicious" class="chip-btn chip-suspicious" type="button" title="Load a suspicious bank/phishing message sample">
+              <span>🚨 Suspicious Message Sample</span>
+            </button>
+            <button id="btnSampleOrdinary" class="chip-btn chip-ordinary" type="button" title="Load an ordinary appointment reminder sample">
+              <span>🩺 Ordinary Message Sample</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Text Input Area -->
+        <div class="input-area-container">
+          <label for="messageInput" class="visually-hidden">Paste SMS, email, or chat message here</label>
+          <textarea
+            id="messageInput"
+            class="message-textarea"
+            placeholder="Paste your SMS, email, or chat message here to check for common warning signs..."
+            aria-describedby="charCounter wordCounter"
+            spellcheck="false"
+          ></textarea>
+
+          <div class="textarea-footer">
+            <div class="counter-group">
+              <span id="charCounter">0 characters</span>
+              <span>•</span>
+              <span id="wordCounter">0 words</span>
+            </div>
+            <span style="font-size:0.75rem; color:var(--text-muted);">Links are safely defanged</span>
+          </div>
+        </div>
+
+        <!-- Empty Input Validation Alert -->
+        <div id="validationAlert" class="validation-alert" role="alert" aria-live="assertive">
+          <span aria-hidden="true">⚠️</span>
+          <span id="validationMessage">Please paste or type a message first before checking.</span>
+        </div>
+
+        <!-- Working Action Buttons -->
+        <div class="action-buttons-group">
+          <button id="checkBtn" class="btn-primary" type="button" id="checkMessageButton">
+            <span>🔍 Check Message</span>
+          </button>
+          <button id="clearBtn" class="btn-secondary" type="button" id="clearMessageButton">
+            <span>🗑️ Clear</span>
+          </button>
+          <button id="testSuiteBtn" class="btn-testsuite" type="button" title="Open Manual Test Scenario Suite">
+            <span>🧪 Test Scenarios</span>
+          </button>
+        </div>
+
+        <!-- Checked Warning Signs Legend -->
+        <div class="rules-legend-box">
+          <div style="font-size:0.8rem; font-weight:700; color:var(--text-secondary); text-transform:uppercase; letter-spacing:0.04em; margin-bottom:0.6rem;">
+            6 Warning Sign Categories Checked:
+          </div>
+          <div class="rules-legend-grid">
+            <div class="legend-pill">⚡ Urgent demands or threats</div>
+            <div class="legend-pill">🔑 Requests for passwords, PINs, or OTPs</div>
+            <div class="legend-pill">🔗 Links or shortened URLs</div>
+            <div class="legend-pill">💳 Payment or money transfer requests</div>
+            <div class="legend-pill">🎁 Unexpected prizes or rewards</div>
+            <div class="legend-pill">🛡️ Requests to verify account or identity details</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Right Column: Results & Safety Guidance -->
+      <section class="glass-card" aria-labelledby="resultsSectionTitle" id="resultsSection">
+        <div class="card-header">
+          <div class="card-title-group">
+            <span aria-hidden="true">📊</span>
+            <h2 id="resultsSectionTitle">Analysis Results</h2>
+          </div>
+          <span class="card-badge" id="resultsBadge">Educational Guidance</span>
+        </div>
+
+        <div class="results-container">
+          <!-- Initial Placeholder State (Before Checking) -->
+          <div id="resultsEmptyState" class="results-empty-state">
+            <div class="empty-icon" aria-hidden="true">🔍</div>
+            <h3 class="empty-title">Ready to Analyze</h3>
+            <p class="empty-subtitle">
+              Paste a message on the left or select a sample, then select <strong>“Check Message”</strong> to see plain-language warning signs and practical safety steps.
+            </p>
+            <div class="empty-features-grid">
+              <div class="empty-feature-card">
+                <div class="empty-feature-icon">⚡</div>
+                <strong>Plain Language</strong>
+                <div>Explains why signs are risky</div>
+              </div>
+              <div class="empty-feature-card">
+                <div class="empty-feature-icon">🛡️</div>
+                <strong>Link Defanging</strong>
+                <div>Safely inspects URLs</div>
+              </div>
+              <div class="empty-feature-card">
+                <div class="empty-feature-icon">📋</div>
+                <strong>Safety Steps</strong>
+                <div>Clear verification actions</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Active Analysis Results Panel -->
+          <div id="resultsActiveState" class="results-active-state" role="region" aria-live="polite">
+            <!-- Warning Signs Count Indicator Banner -->
+            <div id="riskIndicatorBanner" class="risk-indicator-banner risk-low">
+              <div class="risk-info-group">
+                <span id="riskLevelBadge" class="risk-level-badge">0 WARNING SIGNS FOUND</span>
+                <h3 id="riskHeadline" class="risk-headline">No common warning signs found</h3>
+                <p id="riskSummaryText" class="risk-summary-text">
+                  No common warning signs were detected in this message. Please note: This does not prove the message is safe. Scammers continually develop new techniques—always verify independently.
+                </p>
+              </div>
+
+              <!-- Animated Risk Meter Gauge -->
+              <div class="risk-meter-wrapper" aria-label="Risk Meter">
+                <svg class="risk-meter-svg" viewBox="0 0 80 80">
+                  <circle class="risk-meter-bg" cx="40" cy="40" r="35"></circle>
+                  <circle id="riskMeterFill" class="risk-meter-fill" cx="40" cy="40" r="35"></circle>
+                </svg>
+                <div class="risk-meter-center">
+                  <span id="riskScoreNum" class="risk-meter-number">0</span>
+                  <span class="risk-meter-label">Signs</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Detected Warning Signs List -->
+            <div>
+              <div class="section-subhead">
+                <h3><span>⚠️</span> Warning Signs Found</h3>
+                <span id="findingsCountBadge" class="findings-count-badge">0 Signs</span>
+              </div>
+              <div id="findingsList" class="findings-list">
+                <!-- Populated dynamically by js/app.js -->
+              </div>
+            </div>
+
+            <!-- Defanged Link Inspector (Safe View) -->
+            <div id="linkInspectorContainer" style="display:none;">
+              <!-- Populated dynamically if URLs are present -->
+            </div>
+
+            <!-- Practical Next Steps to Stay Safe -->
+            <div class="safety-steps-card">
+              <div class="safety-steps-header">
+                <h3 style="font-size:0.95rem; font-weight:700; display:flex; align-items:center; gap:0.5rem;">
+                  <span>📋</span> Practical Next Steps to Stay Safe
+                </h3>
+                <button id="copyAdviceBtn" class="copy-advice-btn" type="button" title="Copy Safety Advice to Clipboard">
+                  <span>📋 Copy Advice</span>
+                </button>
+              </div>
+              <div id="safetyStepsList">
+                <!-- Checkbox items populated dynamically -->
+              </div>
+            </div>
+
+            <!-- Important Educational Disclaimer -->
+            <div class="disclaimer-banner" role="note">
+              <span class="disclaimer-icon" aria-hidden="true">💡</span>
+              <div>
+                <strong>Advisory Disclaimer:</strong> SafeStep provides educational guidance only. It is not a definitive scam detector and cannot prove whether a message is authentic or fraudulent. Scammers evolve their tactics frequently; an absence of warning signs does not guarantee safety.
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- Interactive Test Scenario Runner Modal -->
+    <div id="testSuiteModal" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="modalTestSuiteTitle">
+      <div class="modal-container">
+        <div class="modal-header">
+          <div class="modal-title" id="modalTestSuiteTitle">
+            <span>🧪</span> Manual Test Scenario Runner
+          </div>
+          <button id="closeTestSuiteModal" class="modal-close-btn" type="button" aria-label="Close modal">×</button>
+        </div>
+
+        <p style="font-size:0.85rem; color:var(--text-secondary); margin-bottom:1.25rem;">
+          Verify the 4 required manual test scenarios directly in the browser:
+        </p>
+
+        <!-- Scenario 1 -->
+        <div class="test-scenario-card">
+          <div class="test-scenario-header">
+            <span class="test-scenario-name">1. Suspicious Phishing Text</span>
+            <span id="test_suspicious_status" class="test-scenario-status status-pending">Pending</span>
+          </div>
+          <div class="test-scenario-desc">Tests urgent account freeze, fake bank link, and credential verification warning signs.</div>
+          <div id="test_suspicious_details" style="font-size:0.75rem; margin-bottom:0.4rem; color:var(--text-muted);"></div>
+          <button class="test-scenario-run-btn" data-scenario="test_suspicious" type="button">Run &amp; Load in Checker</button>
+        </div>
+
+        <!-- Scenario 2 -->
+        <div class="test-scenario-card">
+          <div class="test-scenario-header">
+            <span class="test-scenario-name">2. Ordinary Benign Message</span>
+            <span id="test_ordinary_status" class="test-scenario-status status-pending">Pending</span>
+          </div>
+          <div class="test-scenario-desc">Tests appointment reminder to confirm “No common warning signs found” result.</div>
+          <div id="test_ordinary_details" style="font-size:0.75rem; margin-bottom:0.4rem; color:var(--text-muted);"></div>
+          <button class="test-scenario-run-btn" data-scenario="test_ordinary" type="button">Run &amp; Load in Checker</button>
+        </div>
+
+        <!-- Scenario 3 -->
+        <div class="test-scenario-card">
+          <div class="test-scenario-header">
+            <span class="test-scenario-name">3. Empty Input Validation</span>
+            <span id="test_empty_status" class="test-scenario-status status-pending">Pending</span>
+          </div>
+          <div class="test-scenario-desc">Tests checking an empty box to verify helpful validation message without crashing.</div>
+          <div id="test_empty_details" style="font-size:0.75rem; margin-bottom:0.4rem; color:var(--text-muted);"></div>
+          <button class="test-scenario-run-btn" data-scenario="test_empty" type="button">Run Test</button>
+        </div>
+
+        <!-- Scenario 4 -->
+        <div class="test-scenario-card">
+          <div class="test-scenario-header">
+            <span class="test-scenario-name">4. Clear Button Reset</span>
+            <span id="test_clear_status" class="test-scenario-status status-pending">Pending</span>
+          </div>
+          <div class="test-scenario-desc">Tests clearing message input, counters, validation alerts, and results panel.</div>
+          <div id="test_clear_details" style="font-size:0.75rem; margin-bottom:0.4rem; color:var(--text-muted);"></div>
+          <button class="test-scenario-run-btn" data-scenario="test_clear" type="button">Run &amp; Test Clear</button>
+        </div>
+
+        <div style="margin-top:1.25rem; display:flex; justify-content:space-between; align-items:center;">
+          <button id="runAllTestsBtn" class="btn-primary" type="button" style="padding:0.6rem 1.25rem; font-size:0.88rem;">
+            ⚡ Run All 4 Scenarios Now
+          </button>
+          <span style="font-size:0.75rem; color:var(--text-muted);">All client-side verification</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div id="toastNotice" class="toast-notice" role="status" aria-live="polite"></div>
+
+    <!-- Footer -->
+    <footer class="app-footer" role="contentinfo">
+      <div class="footer-top">
+        <div>
+          <strong>SafeStep</strong> — AI Scam Message Checker
+        </div>
+        <ul class="footer-links">
+          <li><a href="#testSuiteModal" onclick="document.getElementById('testSuiteBtn').click(); return false;">Manual Test Scenarios</a></li>
+        </ul>
+      </div>
+      <div class="footer-disclaimer-fineprint">
+        SafeStep is an educational advisory tool. It analyzes message text for common deception patterns, but does not store personal data or send messages to any server. Never share passwords, PINs, or OTPs, and always independently verify unexpected communications with official organizations.
+      </div>
+    </footer>
+  </div>
+
+  <!-- Scripts -->
+  <script src="js/rules.js"></script>
+  <script src="js/analyzer.js"></script>
+  <script src="js/samples.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
