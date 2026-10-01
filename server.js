@@ -75,7 +75,7 @@ const server = http.createServer((req, res) => {
   });
 });
 
-server.listen(PORT, () => {
+server.listen(PORT, '0.0.0.0', () => {
   console.log('====================================================');
   console.log('🛡️  SafeStep: AI Scam Message Checker');
   console.log('🔒  Local Privacy Mode Active (100% Client-Side)');

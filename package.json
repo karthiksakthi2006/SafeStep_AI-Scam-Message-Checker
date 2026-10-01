@@ -1,6 +1,7 @@
 {
   "name": "safestep-scam-checker",
   "version": "1.0.0",
+  "private": true,
   "description": "SafeStep: An AI Scam Message Checker for Digital Safety & Cybersecurity hackathons",
   "main": "server.js",
   "scripts": {
